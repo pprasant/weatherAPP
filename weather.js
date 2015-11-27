@@ -1,8 +1,15 @@
 var request = require('request');
 
-var url = 'http://api.openweathermap.org/data/2.5/weather?q=Sydney,au&appid=2de143494c0b295cca9337e1e96b00e0';
 
-module.exports = function(callback){
+
+module.exports = function(location, callback){
+	
+	var encodedLocation = encodeURIComponent(location);
+	var url = 'http://api.openweathermap.org/data/2.5/weather?q=' + encodedLocation + '&appid=2de143494c0b295cca9337e1e96b00e0';
+	
+	if(!location){
+		return callback('no location provided');
+	}
 	
 	request({
 	
@@ -16,7 +23,7 @@ module.exports = function(callback){
 	
 		//console.log(JSON.stringify(body,null,4));	
 		
-		callback('It\'s' + ' ' + (body.main.temp-32)/1.8000 + ' in ' + body.name);
+		callback('It\'s' + ' ' + body.main.temp + ' in ' + body.name);
 		
 	}
 	
