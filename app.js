@@ -21,24 +21,25 @@ var argv = require('yargs')
 
 if(typeof argv.l === 'string' && argv.l.length > 0){
 	
-	//console.log('has location');
-	weather(argv.l, function(currentWeather){
-	console.log(currentWeather);
-	});
+	console.log('location provided');
+	weather(argv.l).then(function (currentWeather) {
+		console.log(currentWeather);
+		
+	}).catch(function (error){
+		console.log(error);
+	})
+	
 }else{
 	
-	console.log('no location given');
-	location(function(location){
+	console.log('location not provided');
+	location().then(function (loc){
+		return weather(loc.city);
 		
-		if(location){
-			weather(location.city, function(currentWeather){
-				console.log(currentWeather);
-			});
-			
-		} else{
-			
-			console.log('unable to guess location');
-		}
+	}).then(function (currentWeather) {
+		
+		console.log(currentWeather);
+	}).catch(function(error){
+		console.log(error);
 	});
 }
 
